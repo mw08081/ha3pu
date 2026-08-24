@@ -50,9 +50,15 @@
 
 - 데이터 요청 지연 시간을 최소화하고, 서버 리소스 낭비를 방지하여 높은 데이터 처리 안정성을 확보한 백엔드 API 설계
 
+
+<br/>
+
 구현 내용
 
 - **`select_related` 적용:** 주문(`Order`) 조회 시 연관된 상품(`Product`) 테이블을 `JOIN` 쿼리 한 번으로 함께 조회하도록 개선하여, 데이터 수에 비례해 DB 쿼리가 기하급수적으로 증가하는 1+N 문제 방지
+
+<br/>
+
 - **`annotate` 및 `Exists` 서브쿼리를 활용한 메모리 및 I/O 최적화:** 배송 정보 전체 객체를 메모리에 로드하는 대신, DB 엔진 레벨에서 존재 유무(`boolean`)만 판단하여 가져오도록 설계. 불필요한 데이터 전송량을 대폭 줄이고 직렬화(Serialization) 오버헤드 감소
 
 ```python
@@ -65,8 +71,7 @@ orders = Order.objects.select_related('product').annotate(
 )
 ```
 
-![참고자료](image.png)
-
+<img width="1070" height="373" alt="Image" src="https://github.com/user-attachments/assets/e3be28f7-df72-46bb-a345-4f6260a151c6" />
 참고자료
 
 </blockquote>
@@ -80,9 +85,15 @@ orders = Order.objects.select_related('product').annotate(
 
 - 재고 차감 및 수량 변경 시 발생하는 동시성 문제 방지 및 불필요한 Read-Before-Write 쿼리 최소화
 
+
+<br/>
+
 구현 내용
 
 - 애플리케이션 메모리로 데이터를 조회(`SELECT`) 후 수정하여 다시 저장(`UPDATE`)하는 기존 방식 대신, DB 엔진 레벨에서 직접 컬럼 값을 참조하여 연산을 수행하도록 구현
+
+<br/>
+
 - 불필요한 `SELECT` 쿼리를 생략하고 단일 `UPDATE` 쿼리만 전송하여 데이터베이스와의 Round-Trip Time(RTT) 최소화
 
 코드
@@ -114,21 +125,32 @@ if updated_count == 0:
 
 - 정규화를 통해 데이터 중복을 최소화하고, 엔티티 간 무결성과 독립성을 확보한 데이터베이스 아키텍처 구축
 
+
+<br/>
+
 설계 방법
 
 - **`User` - `Product` (N:M 해소 및 데이터 스냅샷 보장)**
 
 `User`와 `Product` 간 다대다(N:M) 관계를 교차 테이블인 `Order`로 해소하고, 구매 시점의 가격(`final_price`)을 별도 보관하여 원본 상품 정보 변경에도 과거 결제 데이터의 무결성을 유지
+
+<br/>
+
 - `Order` - `Payment` ****(1:1 역할 분리 및 관심사 분리)
 
 주문 본체 데이터와 PG 결제 데이터(`Payment`)를 `1:1 (OneToOneField)` 관계로 분리 설계하여, 결제 시도·실패·취소 등의 상태 변화 라이프사이클이 주문 본문 데이터를 오염시키지 않도록 관심사를 명확히 격리
+
+<br/>
+
 - **`Order` - `Shipipng`** (최소 권한 기반의 데이터 보안 및 조회 최적화)
 
 배송 발주 시스템에서 최소한의 데이터 테이블을 검색하고, 거래처 계정에 `Shipping` 테이블 조회 권한만 제공함으로써 데이터 패킷 최적화와 데이터베이스 보안을 향상
 
-결과(일부 필드 생략) 
 
-![image.png](image%201.png)
+<br/>
+
+결과(일부 필드 생략) 
+<img width="1000" height="662" alt="Image" src="https://github.com/user-attachments/assets/df682d69-aa53-4edc-ba95-6cee7ec16432" />
 
 </blockquote>
 
@@ -140,6 +162,9 @@ if updated_count == 0:
 구현 목표
 
 - 빈번하게 발생하는 필터링·정렬 조건에 최적화된 인덱스를 구성하여, DB CPU 사용량 절감 및 쿼리 응답 속도 최적화
+
+
+<br/>
 
 구현 내용
 
@@ -163,6 +188,9 @@ if updated_count == 0:
     ```
     
 
+<br/>
+
+
 - **`Order.purchase_date` (`db_index=True` 단일 인덱스)**
     - **설계 이유:** 특정 기간의 주문 내역 조회 및 최신순 정렬(`ORDER BY purchase_date DESC`) 쿼리가 빈번하게 발생하는 점을 고려하여 설정.
     - **기대 효과:** DB의 추가적인 메모리/CPU 정렬 연산을 제거하고, 기간 검색 범위를 최소화하여 읽기 성능 향상.
@@ -175,6 +203,9 @@ if updated_count == 0:
         )
     ```
     
+
+<br/>
+
 
 - **`Payment.payment_state` + `Payment.created_at` (`Composite Index` 복합 인덱스)**
     - **설계 이유:** "특정 상태(예: 결제 대기)인 데이터 중 특정 기간 내 작성된 건"을 필터링하는 조건 검색 패턴에 최적화하기 위해 설정
@@ -206,7 +237,7 @@ if updated_count == 0:
 
 ### 3. 인프라 및 네트워크 설계
 
-![image.png](image%202.png)
+<img width="791" height="355" alt="Image" src="https://github.com/user-attachments/assets/8076d6ed-1ce9-4b99-bc35-8d7b188777d2" />
 
 #### 1) GCP 기반의 클라우드 인프라 구축
 
@@ -217,10 +248,19 @@ if updated_count == 0:
 
 - GCP 생태계를 활용하여 컴퓨팅, DB, 스토리지를 분리함으로써 서비스의 가용성 확보하고 안정적인 서버 운영 환경 구축
 
+
+<br/>
+
 구현 내용
 
 - Compute Engine: Linux OS 기반 서버 구축 및 외부 고정 IP(Static IP) 할당을 통한 안정적인 서버 엔드포인트 운용
+
+<br/>
+
 - Cloud SQL: MySQL 8.0 기반으로 애플리케이션 서버와 DB를 분리하고, VPC 내부 IP 연동을 통해 외부 무단 접근 차단 및 네트워크 홉(Hop) 감소로 데이터 통신 성능과 비용 최적화
+
+<br/>
+
 - Cloud Storage: 정적 자원 및 유저 미디어 파일을 GCS 버킷으로 격리하여 서버 I/O 부담을 해소하고, 프라이빗 버킷에서 서명된 URL(Signed URL) 방식을 적용해 파일 보안 및 권한 검증 처리를 GCP 서비스로 이관
 </blockquote>
 
@@ -233,9 +273,14 @@ if updated_count == 0:
 
 - 클라이언트와 애플리케이션 간 보안성 강화 및 WSGI/Reverse Proxy 레이어 구성을 통한 웹 요청 처리 성능 최적화
 
+<br/>
+
 구현 내용
 
 - Nginx & Gunicorn: Nginx를 Reverse Proxy로 두어 정적 파일 처리 및 SSL 종단을 담당하게 하고, Unix Socket 연동 기반의 Gunicorn(WSGI)을 통해 Django 애플리케이션으로의 요청 동시성 효율화
+
+<br/>
+
 - Cloud Flare: DNS 타깃팅 및 Reverse Proxy모드를 적용하여 원천 서버 IP 노출을 차단하고 DDoS 등 외부 보안 위협 1차 방어
 </blockquote>
 
@@ -252,9 +297,14 @@ if updated_count == 0:
 
 - 데이터베이스 레이어의 네트워크 격리, 전송 구간 암호화, 최소 권한 적용 및 감사 로그 체계를 구축하여 외부 데이터 침해 방지 및 시스템 추적성 강화
 
+<br/>
+
 구현 내용
 
 - 비공개 IP 전용 구성: Cloud SQL을 VPC 내부 전용 IP로 전환하여 공용 인터넷 노출을 차단
+
+<br/>
+
 - 전송 구간 SSL/TLS 암호화 및 패킷 검증: `'ssl_mode': 'REQUIRED'` 옵션 적용
 
 ```python
@@ -276,16 +326,21 @@ sudo tcpdump -i any -X -vv port 3306
 0x0240:  b032 6a20 e1a7 d2b2 2431 e14f 2db3 e01b  .2j.....$1.O-...
 ```
 
+<br/>
+
 - 최소 권한 원칙(Principle of Least Privilege) 계정 관리: 기존 `root` 접속 방식에서 탈피하여 서비스 전용 최소 권한 계정(`django_user`)으로 DB 인가 권한 제한
+
+<br/>
+
 - GCP Cloud Audit Logging 감사 체계 구축: DB 감사 플래그(`cloudsql_mysql_audit = ON`) 및 IAM 연동을 설정하고 Log Explorer 쿼리를 활용한 DML 추적 환경 구성
     
-    ![감사 플래스 설정 상태](image%203.png)
-    
-    감사 플래스 설정 상태
-    
-    ![로그 탐색기에서 LQL 설정시 다음과 같은 내용을 확인할 수 있다 (현재 general_log를 통해서 검색)](image%204.png)
-    
-    로그 탐색기에서 LQL 설정시 다음과 같은 내용을 확인할 수 있다 (현재 general_log를 통해서 검색)
+<img width="533" height="341" alt="Image" src="https://github.com/user-attachments/assets/eb696098-d696-4514-80f5-e13b0ae0adfb" />
+
+감사 플래스 설정 상태
+
+<img width="1371" height="333" alt="Image" src="https://github.com/user-attachments/assets/52835067-c215-4b9b-90d6-ed20bca83f30" />
+
+로그 탐색기에서 LQL 설정시 다음과 같은 내용을 확인할 수 있다 (현재 general_log를 통해서 검색)
     
 </blockquote>
 
@@ -298,9 +353,15 @@ sudo tcpdump -i any -X -vv port 3306
 
 - Django 기본 TokenAuthentication 구조를 활용하여 API 요청별 사용자 접근 권한 검증 강화
 
+
+<br/>
+
 구현 내용
 
 - Django TokenAuthentication 적용: 유저 로그인 시 서버 단에서 고유 Token을 발급·매핑하고, HTTP Header를 통한 요청 검증 처리
+
+<br/>
+
 - RESTful API 권한 제어: `@permission_classes([IsAuthenticated])`를 활용해 보호된 엔드포인트에 대한 무단 접근 차단
 
 코드
@@ -361,6 +422,9 @@ def get_user(request):
 
 - 메인 웹 서버(Django)의 동영상 I/O 병목 현상을 방지하기 위해 비동기 처리 기반의 Node.js 스트리밍 전용 모듈 구축
 
+
+<br/>
+
 구현 내용
 
 - Nginx 리버스 프록시 연동: 서브도메인으로 유입되는 HTTP 트래픽을 내부 HLS_SERVER_PORT 포트의 Node.js 서버로 전달하여 보안성 및 TLS 처리 분리
@@ -375,6 +439,9 @@ server {
     }
 }
 ```
+
+
+<br/>
 
 - GCS 비공개 버킷 스트림 연동: 로컬 디스크 저장 방식 대신 `@google-cloud/storage` SDK를 통해 GCS 버킷 내 HLS 파일 존재 여부(`exists`)를 검증하고, 읽기 스트림(`createReadStream`)을 생성하여 서버 메모리 점유 최소화
 
@@ -417,12 +484,18 @@ getSegmentStream: (req, cb) => {
 
 - 클라이언트-서버 간 금액 검증으로 결제 데이터 위변조를 차단하고, 실패 시나리오별 예외 처리를 통해 결제 트랜잭션의 무결성과 안정성을 확보
 
+
+<br/>
+
 구현 내용
 
 - 6번: 토스페이먼츠 API 스펙에 따라 결제 요청과 최종 승인(Confirm) 과정을 분리하여 처리
 - 7번: 2번 과정에서 서버 DB에 저장한 주문 데이터(유저, 금액)와 6번에서 전달받은 결제 정보가 일치하는지 검증 (4번 클라이언트 단계에서의 금액 변조 차단)
 
-![image.png](image%205.png)
+<img width="606" height="521" alt="image 5" src="https://github.com/user-attachments/assets/4412eae2-96e5-48b4-9f99-6115a85d20f4" />
+
+
+<br/>
 
 코드
 
@@ -519,10 +592,14 @@ https://github.com/mw08081/ha3pu/blob/main/README.md#3-%EB%8C%80%EC%9A%A9%EB%9F%
 - 특정 조회 API 호출 시 응답 데이터 용량이 314KB에 달하고, 응답 시간이 3.0초까지 지연되는 심각한 성능 병목 현상 발생
 - 데이터 처리 지연으로 인해 사용자 경험(UX) 저해 및 백엔드 서버 리소스 부담 가중
 
+
+<br/>
+
 **원인 분석 및 가설 검증** 
 
 - 가설 1: GCP Compute Engine과 Cloud SQL 간 네트워크 홉 레이턴시
     - 검증: 최초 설정에서 두 인스턴스 모두 Public IP 환경이었기에 네트워크 홉 레이턴시를 의심하여 Public IP → VPC Private IP 환경으로 전환했으나 개선 미비 (인프라 이슈 배제)
+
 
 - 가설 2: API 직렬화(Serialization) 과정에서의 오버헤드 및 1+N 쿼리 문제
     - 검증: 무분별하게 연결된 외래키 필드 제거 및 ORM 최적화(`select_related`, `annotate` 활용)를 통해 DB 레벨에서 최적화된 데이터만 추출하도록 수정
@@ -538,7 +615,10 @@ orders = Order.objects.select_related('product').annotate(
 )
 ```
 
-![image.png](image.png)
+<img width="1070" height="373" alt="image" src="https://github.com/user-attachments/assets/80a3759e-dfdc-459e-9de8-644fc3120dec" />
+
+
+<br/>
 
 결과 
 
@@ -559,6 +639,9 @@ orders = Order.objects.select_related('product').annotate(
 - 토스페이먼츠 결제창 인증 완료 후, 백엔드 승인 엔드포인트(`/store/confirm`)로 `POST` 요청 전송 시 **`403 Forbidden (CSRF verification failed)`** 에러가 발생하며 결제 승인 실패.
 - 세션 기반 인증이 적용된 백엔드 환경에서 결제 승인 요청이 보안 미들웨어에 의해 차단됨
 
+
+<br/>
+
 **원인 분석** 
 
 - **헤더 누락:** `POST` 요청에 대해 브라우저 쿠키와 요청 헤더 CSRF 토큰을 교차 검증이 필요하지만, `X-CSRFToken` 헤더 누락으로 요청이 차단됨
@@ -577,6 +660,9 @@ const response = await fetch(`${window.location.origin}/store/confirm`, {
 });
 ```
 
+
+<br/>
+
 결과 
 
 - 웹 보안 및 CSRF 방어 메커니즘 이해: 쿠키 기반 웹 애플리케이션에서 `POST` 요청 시 왜 CSRF 토큰 검증이 필요한지, 헤더와 쿠키 간 교차 검증 구조를 이해함
@@ -593,13 +679,22 @@ const response = await fetch(`${window.location.origin}/store/confirm`, {
 
 - 두가지 서비스가 몰릴 경우 대용량 I/O와 수많은 네트워크 커넥션 발생으로 인해 서버 자원에 극심한 병목과 부하 발생
 
+
+<br/>
+
 **원인 분석** 
 
 - 단일 인프라 내 리소스 처리 병목: 동일 Compute Engine 인프라 자원을 공유하는 구조에서 Node.js의 지속적인 HLS 조각 파일 스트리밍 요청과 Django 서버의 대용량 파일 다운로드 I/O가 동시에 몰려 CPU 및 Disk I/O 병목이 심화됨
 
+
+<br/>
+
 시도
 
 - HLS 전용 Compute Engine 인스턴스 추가: HLS 서버를 다른 Comput Engine Instance로 분리하는 방법도 고민해봤지만, 클라우드 서비스 비용 부담 증가로 무리가 있음을 확인
+
+
+<br/>
 
 해결 방법
 
@@ -630,6 +725,9 @@ def generate_signed_url(bucket_name, file_path, expiration=10):
         )
     )
 ```
+
+
+<br/>
 
 결과 
 
