@@ -504,6 +504,8 @@ def confirm(request) :
 
 </blockquote>
 
+<br/>
+
 ### 1. 특정 조회 API 병목 개선 및 ORM 최적화(응답속도 97% 개선)
 
 <blockquote>
@@ -542,6 +544,8 @@ orders = Order.objects.select_related('product').annotate(
 
 </blockquote>
 
+<br/>
+
 ### 2. 토스페이먼츠 PG연동 간 발생한 CSRF 관련 웹 보안 문제
 
 <blockquote>
@@ -574,6 +578,8 @@ const response = await fetch(`${window.location.origin}/store/confirm`, {
 
 - 웹 보안 및 CSRF 방어 메커니즘 이해: 쿠키 기반 웹 애플리케이션에서 `POST` 요청 시 왜 CSRF 토큰 검증이 필요한지, 헤더와 쿠키 간 교차 검증 구조를 이해함
 </blockquote>
+
+<br/>
 
 ### 3. 대용량 파일 처리 부하 개선: GCP Signed URL 기반 전송 책임 이관
 
