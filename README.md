@@ -1,22 +1,26 @@
-
-# 포트폴리오
-
 ## 합격뿌수기 | 2024.01. ~ 2026.07. (개인프로젝트)
 
 - 개요: 실시간 동영상 강의 스트리밍 서비스와 질문/소통 게시판 플랫폼
+
+<br/>
+
 - 기술 스택
     - Backend: Django, Node.js
     - Infra & DevOps:  GCP Compute Engine, Linux, Nginx, Gunicorn, Certbot(TLS), CloudFlare(Reverse Proxy)
     - Database: Google Cloud SQL (MySQL 8.0)
+      
+<br/>
+
 - 상세 업무
     - VPC Private IP를 이용한 네트워크 홉 레이턴시 개선과 직렬화 오버헤드 및 1+N 쿼리 문제 해결을 통한 Django ORM 최적화로 데이터 용량 45% 절감 및 API 응답 속도 97% 개선
     - GCP, Nginx, Gunicorn, systemd 데몬 기반의 무중단 배포 환경구축 및 Certbot(TLS), CloudFlare(Reverse Proxy) 연동을 통한 HTTPS 보안 강화
     - Django 서버 토큰 기반 유저 인증/인가 시스템 구현 및 RESTful API 설계·개발
     - Node.js 및 HLS 프로토콜 기반 동영상 스트리밍 서버 구축과 Toss Payments PG 결제 모듈 연동
-- github
-    
-    [https://github.com/mw08081/ha3pu](https://github.com/mw08081/ha3pu)
-    
+
+
+<br/>
+
+
 
 ## 기술 설명
 
