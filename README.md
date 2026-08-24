@@ -496,11 +496,14 @@ def confirm(request) :
 
 주요 트러블 슈팅에 관해서 설명합니다.
 
-[1. 특정 조회 API 병목 개선 및 ORM 최적화(응답속도 97% 개선)](https://app.notion.com/p/1-API-ORM-97-3c6ce4f4d10880ec8a68eb86e4616bb1?pvs=21) 
+[1. 특정 조회 API 병목 개선 및 ORM 최적화(응답속도 97% 개선)](https://github.com/mw08081/ha3pu/blob/main/README.md#1-%ED%8A%B9%EC%A0%95-%EC%A1%B0%ED%9A%8C-api-%EB%B3%91%EB%AA%A9-%EA%B0%9C%EC%84%A0-%EB%B0%8F-orm-%EC%B5%9C%EC%A0%81%ED%99%94%EC%9D%91%EB%8B%B5%EC%86%8D%EB%8F%84-97-%EA%B0%9C%EC%84%A0)
 
-[2. 토스페이먼츠 PG연동 간 발생한 CSRF 관련 웹 보안 문제](https://app.notion.com/p/2-PG-CSRF-3c6ce4f4d10880fdb1e1e2dcb1155fe8?pvs=21) 
 
-[3. 대용량 파일 처리 부하 개선: GCP Signed URL 기반 전송 책임 이관](https://app.notion.com/p/3-GCP-Signed-URL-3c6ce4f4d10880b7a40ec7c334f0efa3?pvs=21) 
+[2. 토스페이먼츠 PG연동 간 발생한 CSRF 관련 웹 보안 문제](https://github.com/mw08081/ha3pu/blob/main/README.md#2-%ED%86%A0%EC%8A%A4%ED%8E%98%EC%9D%B4%EB%A8%BC%EC%B8%A0-pg%EC%97%B0%EB%8F%99-%EA%B0%84-%EB%B0%9C%EC%83%9D%ED%95%9C-csrf-%EA%B4%80%EB%A0%A8-%EC%9B%B9-%EB%B3%B4%EC%95%88-%EB%AC%B8%EC%A0%9C)
+
+
+[3. 대용량 파일 처리 부하 개선: GCP Signed URL 기반 전송 책임 이관](
+https://github.com/mw08081/ha3pu/blob/main/README.md#3-%EB%8C%80%EC%9A%A9%EB%9F%89-%ED%8C%8C%EC%9D%BC-%EC%B2%98%EB%A6%AC-%EB%B6%80%ED%95%98-%EA%B0%9C%EC%84%A0-gcp-signed-url-%EA%B8%B0%EB%B0%98-%EC%A0%84%EC%86%A1-%EC%B1%85%EC%9E%84-%EC%9D%B4%EA%B4%80)
 
 </blockquote>
 
