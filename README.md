@@ -495,13 +495,10 @@ getSegmentStream: (req, cb) => {
 - 6번: 토스페이먼츠 API 스펙에 따라 결제 요청과 최종 승인(Confirm) 과정을 분리하여 처리
 - 7번: 2번 과정에서 서버 DB에 저장한 주문 데이터(유저, 금액)와 6번에서 전달받은 결제 정보가 일치하는지 검증 (4번 클라이언트 단계에서의 금액 변조 차단)
 
-<img width="606" height="521" alt="image 5" src="https://github.com/user-attachments/assets/4412eae2-96e5-48b4-9f99-6115a85d20f4" />
+<img width="606" height="521" alt="image 5" src="https://github.com/user-attachments/assets/4412eae2-96e5-48b4-9f99-6115a85d20f4" />  
 
+ㅤ  
 
-<br/>
-
-
- 
 코드
 
 
@@ -621,13 +618,11 @@ orders = Order.objects.select_related('product').annotate(
 )
 ```
 
-<img width="1070" height="373" alt="image" src="https://github.com/user-attachments/assets/80a3759e-dfdc-459e-9de8-644fc3120dec" />
-
-
-
+<img width="1070" height="373" alt="image" src="https://github.com/user-attachments/assets/80a3759e-dfdc-459e-9de8-644fc3120dec" />  
 
 <br/>
 
+ㅤ
 
 결과 
 
