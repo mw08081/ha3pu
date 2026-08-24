@@ -364,6 +364,9 @@ sudo tcpdump -i any -X -vv port 3306
 
 - RESTful API 권한 제어: `@permission_classes([IsAuthenticated])`를 활용해 보호된 엔드포인트에 대한 무단 접근 차단
 
+
+<br/>
+
 코드
 
 ```python
@@ -497,7 +500,10 @@ getSegmentStream: (req, cb) => {
 
 <br/>
 
+
+ 
 코드
+
 
 ```python
 # get_payments_page 결제하기 버튼 클릭
@@ -618,7 +624,10 @@ orders = Order.objects.select_related('product').annotate(
 <img width="1070" height="373" alt="image" src="https://github.com/user-attachments/assets/80a3759e-dfdc-459e-9de8-644fc3120dec" />
 
 
+
+
 <br/>
+
 
 결과 
 
