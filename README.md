@@ -25,15 +25,15 @@
 
 구현 기술에 대한 주된 메커니즘들을 설명합니다
 
-[1. 백엔드 아키텍처 및 성능 최적화](https://app.notion.com/p/1-3c6ce4f4d1088030bfd5c6d3e7bf0ab8?pvs=21)
+[1. 백엔드 아키텍처 및 성능 최적화](https://github.com/mw08081/ha3pu/blob/main/README.md#1-%EB%B0%B1%EC%97%94%EB%93%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EB%B0%8F-%EC%84%B1%EB%8A%A5-%EC%B5%9C%EC%A0%81%ED%99%94)
 
-[2. 데이터베이스 설계 및 인덱싱 최적화](https://app.notion.com/p/2-3c6ce4f4d108808789b3f043bba8fb0f?pvs=21) 
+[2. 데이터베이스 설계 및 인덱싱 최적화](https://github.com/mw08081/ha3pu/blob/main/README.md#2-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%EC%84%A4%EA%B3%84-%EB%B0%8F-%EC%9D%B8%EB%8D%B1%EC%8B%B1-%EC%B5%9C%EC%A0%81%ED%99%94)
 
-[3. 인프라 및 네트워크 설계 ](https://app.notion.com/p/3-3c6ce4f4d10880e48389db408847ada0?pvs=21) 
+[3. 인프라 및 네트워크 설계 ](https://github.com/mw08081/ha3pu/blob/main/README.md#3-%EC%9D%B8%ED%94%84%EB%9D%BC-%EB%B0%8F-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EC%84%A4%EA%B3%84)
 
-[4. 시스템 및 인증 보안](https://app.notion.com/p/4-3c6ce4f4d1088028b251d7e512ccb14b?pvs=21) 
+[4. 시스템 및 인증 보안](https://github.com/mw08081/ha3pu/blob/main/README.md#4-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EB%B0%8F-%EC%9D%B8%EC%A6%9D-%EB%B3%B4%EC%95%88)
 
-[5. HLS 기반 미디어 스트리밍 서버 분리 구축 및 토스페이먼츠 PG 연동](https://app.notion.com/p/5-HLS-PG-3c6ce4f4d10880a39d7adb5f4485dab1?pvs=21) 
+[5. HLS 기반 미디어 스트리밍 서버 분리 구축 및 토스페이먼츠 PG 연동](https://github.com/mw08081/ha3pu/blob/main/README.md#5-hls-%EA%B8%B0%EB%B0%98-%EB%AF%B8%EB%94%94%EC%96%B4-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%84%9C%EB%B2%84-%EB%B6%84%EB%A6%AC-%EA%B5%AC%EC%B6%95-%EB%B0%8F-%ED%86%A0%EC%8A%A4%ED%8E%98%EC%9D%B4%EB%A8%BC%EC%B8%A0-pg-%EC%97%B0%EB%8F%99)
 
 </blockquote>
 
